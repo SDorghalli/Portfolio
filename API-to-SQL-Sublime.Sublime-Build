@@ -1,0 +1,37 @@
+
+
+
+
+
+
+
+
+import requests
+
+url = "https://sportapi7.p.rapidapi.com/api/v1/event/13232336/tennis-power"
+
+headers = {
+	"x-rapidapi-key": "46f0fa5578msh3a4abae4d31d541p1f8b6ejsn692ffc5f2a4c",
+	"x-rapidapi-host": "sportapi7.p.rapidapi.com"
+}
+
+response = requests.get(url, headers=headers)
+
+print(response.json())
+
+# Loading API from RapidAPI
+
+import pandas as pd 
+
+data = response.json()
+df = pd.DataFrame(data["tennisPowerRankings"])
+print(df.head())
+
+# fetching data from Sports API and transforming into structured table*/ 
+
+from sqlalchemy import create_engine
+
+engine = create_engine('sqlite:///ranking.db')
+df.to_sql("tennisPowerRankings", con=engine, if_exists="replace", index=False)
+
+# Storing live API data in my local SQL database, ETL pipeline
